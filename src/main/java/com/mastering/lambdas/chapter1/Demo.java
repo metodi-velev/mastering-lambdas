@@ -1,5 +1,7 @@
 package com.mastering.lambdas.chapter1;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -73,7 +75,18 @@ public class Demo {
         return max.orElse(Double.MIN_VALUE);
     }
 
-    public static void main(String[] args) {
+    <U> U executeFileOp(File f, IOFunction<File, U> fileOp) throws IOException {
+        try {
+            return fileOp.apply(f);
+        } catch (IOException e) {
+            // centralized exception handling
+            e.getMessage();
+        }
+        return fileOp.apply(f);
+    }
+
+    public static void main(String[] args) throws IOException {
+        demo.executeFileOp(new File("path-to-file"), File::delete);
         demo.movePoint();
         System.out.println(demo.maxDistance());
         System.out.println(demo.maxDistanceJava8());
