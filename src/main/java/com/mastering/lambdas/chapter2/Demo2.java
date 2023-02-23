@@ -11,9 +11,9 @@ import java.util.stream.Stream;
  * can be seen as a short form of the corresponding statement lambda <br>
  * <code><i>args -> { return expr; }</i></code>
  */
-public class Demo {
+public class Demo2 {
 
-    private static final com.mastering.lambdas.chapter2.Demo demo = new com.mastering.lambdas.chapter2.Demo();
+    private static final Demo2 demo = new Demo2();
     Object i, j;
     IntUnaryOperator iuo = i -> {
         int j = 3;

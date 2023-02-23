@@ -8,14 +8,14 @@ import java.util.stream.IntStream;
 
 import static java.util.Comparator.comparing;
 
-public class Demo {
+public class Demo1 {
 
-    private static Demo demo = new Demo();
+    private static Demo1 demo1 = new Demo1();
     private List<Integer> intList;
 
     List<Point> pointList;
 
-    Demo() {
+    Demo1() {
         intList = Arrays.asList(1, 2, 3, 4, 5);
         pointList = new ArrayList<>();
     }
@@ -86,9 +86,9 @@ public class Demo {
     }
 
     public static void main(String[] args) throws IOException {
-        demo.executeFileOp(new File("path-to-file"), File::delete);
-        demo.movePoint();
-        System.out.println(demo.maxDistance());
-        System.out.println(demo.maxDistanceJava8());
+        demo1.executeFileOp(new File("path-to-file"), File::delete);
+        demo1.movePoint();
+        System.out.println(demo1.maxDistance());
+        System.out.println(demo1.maxDistanceJava8());
     }
 }

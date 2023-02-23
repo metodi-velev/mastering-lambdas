@@ -1,0 +1,18 @@
+The alternative
+created in Java 8 is the class java.util.Optional<T>; an instance of this class is a
+wrapper that may or may not contain a non-null value of type T. The “find” methods
+allow for the possibility of an empty stream by returning Optional, so the correct
+version of the preceding code is
+Optional<Book> anyBook = library.stream()
+.filter(b -> b.getAuthors().contains("Herman Melville"))
+.findAny();
+The next section provides a brief overview of the Optional class.
+By contrast to findAny, and provided the stream is ordered, findFirst will return
+the first element that it encounters. For example, we could find the first line in the text
+of this book containing the string “findFirst”:
+BufferedReader br = new BufferedReader(new FileReader("Mastering.tex"));
+Optional<String> line = br.lines()
+.filter(s -> s.contains("findFirst"))
+.findFirst();
+The use case for findFirst is situations like this, where the problem statement
+concerns finding the first match in an ordered stream. If any match in an ordered
