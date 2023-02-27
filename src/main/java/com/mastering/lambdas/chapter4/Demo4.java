@@ -3,6 +3,7 @@ package com.mastering.lambdas.chapter4;
 import com.mastering.lambdas.chapter1.Point;
 import com.mastering.lambdas.chapter3.Book;
 import com.mastering.lambdas.chapter3.Demo3;
+import com.mastering.lambdas.chapter3.LibraryInit;
 import com.mastering.lambdas.chapter3.Topic;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,7 @@ public class Demo4 {
     private Map<Topic, String> concatenatedTitlesByTopic;
 
     public Demo4() {
-        library = new Demo3().getLibrary();
+        library = new LibraryInit().getLibrary();
         booksByTopic = booksByTopic();
         titleToPubDate = titleToPubDate();
         fictionOrNon = fictionOrNon();
