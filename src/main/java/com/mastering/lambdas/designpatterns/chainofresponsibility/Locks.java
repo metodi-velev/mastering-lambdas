@@ -92,7 +92,7 @@ class CreateFile {
 
     public static void main(String[] args) {
 /*        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\metod\\Desktop\\filename1.txt", true))) {
-            writer.write("Metodi Dimitrov Velev");
+            writer.write("Christian Werner Peterson");
         } catch (IOException ex) {
             ex.getMessage();
         }*/
@@ -101,8 +101,8 @@ class CreateFile {
         String valueBG = null;
         Path path = Paths.get("C:\\Users\\metod\\Desktop\\filename1.txt");
         try (DataOutputStream outStream = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(path)))) {
-            value = "Metodi Dimitrov Velev and Neno Miroslavov Dimitrov";
-            valueBG = "Методи Димитров Велев и Нено Мирославов Димитров";
+            value = "Matthias Werner Braun and John Walter Cane";
+            valueBG = "Матиас Вернер Браун и Джон Валтер Кейн";
             outStream.writeUTF(valueBG);
         } catch (IOException ex) {
             String msg = ex.getMessage();
