@@ -1,0 +1,6 @@
+Ivan    Dimitrov          Ivanov   Petar
+Suzanka   Marinova    Georgieva
+Snezhanka   Marinova    Georgieva     Naya
+Spaska    Marinova                  Dimitrov    Naya
+Dimitar          Pavlov  Petrov Naya
+Naya    Naya

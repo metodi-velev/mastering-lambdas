@@ -76,7 +76,7 @@ public class Demo4 {
     }
 
     /**
-     * A map associating each topic with the total number of volumes on that topic:
+     * A map associating each topic with the book on that topic having the most authors:
      */
     private Map<Topic, Optional<Book>> mostAuthorsByTopic() {
         Map<Topic, Optional<Book>> mostAuthorsByTopic = library.stream()
@@ -538,5 +538,26 @@ class DispRecord {
                 .collect(groupingBy(Book::getTopic,
                         Collectors.reducing(0L, e -> 1L, Long::sum)));
         System.out.println(booksByTopic);
+
+        final List<String> friends =
+                Arrays.asList("Brian", "Nate", "Neal", "Raju", "Sara", "Scott");
+
+        final Optional<String> aLongName =
+                friends.stream()
+                        .reduce((name1, name2) ->                                     //.max(Comparator.comparing(String::length));
+                                name1.length() >= name2.length() ? name1 : name2);
+        aLongName.ifPresent(name ->
+                System.out.println(String.format("A longest name: %s", name)));
+
+        System.out.println("Show sublists of a list");
+        of(friends).forEach(System.out::println);
+    }
+
+    public static <E> Stream<List<E>> of(List<E> list) {
+        return IntStream.range(0, list.size())
+                .mapToObj(start ->
+                        IntStream.rangeClosed(start + 1, list.size())
+                                .mapToObj(end -> list.subList(start, end)))
+                .flatMap(x -> x);
     }
 }
