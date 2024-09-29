@@ -1,0 +1,6 @@
+
+INFO: Server started successfully
+ERROR: Failed to connect to server
+INFO: Processing request from client
+ERROR: Timeout occurred while waiting for response
+INFO: Request completed

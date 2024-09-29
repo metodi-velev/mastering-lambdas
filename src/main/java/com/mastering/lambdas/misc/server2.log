@@ -1,0 +1,6 @@
+
+INFO: Disk check initiated
+ERROR: Disk space full on partition /dev/sda1
+WARNING: High memory usage detected
+ERROR: Memory limit exceeded
+INFO: Disk check completed

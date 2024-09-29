@@ -8,9 +8,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 public class CompletableFutureHttpExample {
 
@@ -443,6 +445,10 @@ class ECommerceComplexExample {
         System.out.println("Sequential Execution Time: " + (end - start) + " ms");
     }
 
+    private static String printCombinedString(String accumulated, String current) {
+        return accumulated + " | " + current;
+    }
+
     // Asynchronous execution using CompletableFuture and thenCombine
     private static void completableFutureExecution() throws InterruptedException, ExecutionException {
         long start = System.currentTimeMillis();
@@ -487,12 +493,19 @@ class ECommerceComplexExample {
             }
         });
 
-        // Combining all futures into one final result
+/*        // Combining all futures into one final result
         CompletableFuture<String> combinedFuture = productInfoFuture
                 .thenCombine(pricingInfoFuture, (productInfo, pricingInfo) -> productInfo + " | " + pricingInfo)
                 .thenCombine(stockInfoFuture, (previous, stockInfo) -> previous + " | " + stockInfo)
                 .thenCombine(userReviewsFuture, (previous, userReviews) -> previous + " | " + userReviews)
-                .thenCombine(relatedProductsFuture, (previous, relatedProducts) -> previous + " | " + relatedProducts);
+                .thenCombine(relatedProductsFuture, (previous, relatedProducts) -> previous + " | " + relatedProducts);*/
+
+        // Combining all futures into one final result - Version 2 using method reference
+        CompletableFuture<String> combinedFuture = productInfoFuture
+                .thenCombine(pricingInfoFuture, ECommerceComplexExample::printCombinedString)
+                .thenCombine(stockInfoFuture, ECommerceComplexExample::printCombinedString)
+                .thenCombine(userReviewsFuture, ECommerceComplexExample::printCombinedString)
+                .thenCombine(relatedProductsFuture, ECommerceComplexExample::printCombinedString);
 
         // Get the final result
         String result = combinedFuture.get();
@@ -510,5 +523,83 @@ class ECommerceComplexExample {
         // Asynchronous Execution with CompletableFuture
         System.out.println("Running asynchronous execution...");
         completableFutureExecution();
+    }
+}
+
+class LogFileProcessingExample {
+
+    private static final ExecutorService executor = Executors.newFixedThreadPool(3);
+
+    // Simulated method to read a log file and process its content
+    private static List<String> readLogFile(String filePath) throws IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(2); // Simulate file read delay
+        Path path = Paths.get(filePath);
+        return Files.readAllLines(path)
+                .stream()
+                .filter(line -> line.contains("ERROR")) // Simulate processing (e.g., filtering errors)
+                .collect(Collectors.toList());
+    }
+
+    // Sequential execution of log file processing
+    private static void sequentialExecution(List<String> filePaths) throws IOException, InterruptedException {
+        long start = System.currentTimeMillis();
+
+        StringBuilder finalReport = new StringBuilder();
+
+        for (String filePath : filePaths) {
+            List<String> fileContent = readLogFile(filePath); // Read and process each file sequentially
+            finalReport.append(String.join("\n", fileContent)).append("\n");
+        }
+
+        long end = System.currentTimeMillis();
+        System.out.println("Sequential Report:");
+        System.out.println(finalReport);
+        System.out.println("Sequential Execution Time: " + (end - start) + " ms");
+    }
+
+    // Asynchronous execution using CompletableFuture and thenCombine
+    private static void completableFutureExecution(List<String> filePaths) throws InterruptedException, ExecutionException {
+        long start = System.currentTimeMillis();
+
+        // Create a CompletableFuture for each file
+        CompletableFuture<String> finalFuture = filePaths.stream()
+                .map(filePath -> CompletableFuture.supplyAsync(() -> {
+                    try {
+                        List<String> fileContent = readLogFile(filePath);
+                        return String.join("\n", fileContent);
+                    } catch (IOException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }, executor))
+                // Use thenCombine to combine all futures
+                .reduce((future1, future2) -> future1.thenCombine(future2, (content1, content2) -> content1 + "\n" + content2))
+                .orElse(CompletableFuture.completedFuture("")); // In case of an empty file list
+
+        // Get the final combined report
+        String finalReport = finalFuture.get();
+
+        long end = System.currentTimeMillis();
+        System.out.println("Asynchronous Report:");
+        System.out.println(finalReport);
+        System.out.println("Asynchronous Execution Time: " + (end - start) + " ms");
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+        // List of file paths to process
+        List<String> filePaths = List.of(
+                "src/main/java/com/mastering/lambdas/misc/server1.log",
+                "src/main/java/com/mastering/lambdas/misc/server2.log",
+                "src/main/java/com/mastering/lambdas/misc/server3.log"
+        );
+
+        // Sequential Execution
+        System.out.println("Running sequential execution...");
+        sequentialExecution(filePaths);
+
+        // Asynchronous Execution
+        System.out.println("Running asynchronous execution...");
+        completableFutureExecution(filePaths);
+
+        executor.shutdown();
     }
 }
