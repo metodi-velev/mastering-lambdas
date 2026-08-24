@@ -115,6 +115,11 @@ public class AnagramGroups {
         return result.toString();
     }
 
+    public String buildClassifierV7(String word) {
+        return word.chars().sorted().collect(StringBuilder::new,
+                StringBuilder::appendCodePoint, StringBuilder::append).toString();
+    }
+
     // Version 1: Simplified with Streams (Recommended)
     public List<List<String>> groupAnagramsV1(List<String> words) {
         if (words == null || words.isEmpty()) {
